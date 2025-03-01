@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ReusableTable from "../components/ReusableTable";
+import Table from "../components/Table";
 import Sidebar from "../components/Sidebar";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -84,13 +84,15 @@ const LeavePage = () => {
         <div className="leave-container">
           {/* Main Leave Table */}
           <div className="table-section">
-            <ReusableTable
+            <Table
               title="Applied Leaves"
               columns={columns}
               data={nonApprovedLeaves} // Show all except "Approved"
               onRowAction={handleRowAction}
               filterOptions={filterOptions}
               statusOptions={statusOptions}
+              showAddButton= {true}
+              addButtonText="Add Leave"
               searchPlaceholder="Search leaves..."
               showProfileImages={true}
             />

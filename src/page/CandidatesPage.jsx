@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
-import ReusableTable from "../components/ReusableTable";
+import Table from "../components/Table";
 
 const columns = [
   { key: "srNo", label: "Sr No.", sortable: false },
@@ -71,13 +71,15 @@ const CandidatesPage = () => {
       <div className="dashboard-wrapper">
         <Sidebar />
         <div className="content">
-          <ReusableTable
+          <Table
             title="Candidates"
             columns={columns}
             data={employeeData}
             onRowAction={handleRowAction}
             filterOptions={filterOptions}
             statusOptions={statusOptions}
+            addButtonText="Add Candidate"
+            showAddButton={true}
             searchPlaceholder="Search employees..."
             showProfileImages={true}
           />

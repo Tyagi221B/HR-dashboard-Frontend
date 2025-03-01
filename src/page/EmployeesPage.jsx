@@ -1,5 +1,5 @@
 import React from "react";
-import ReusableTable from "../components/ReusableTable";
+import Table from "../components/Table";
 import Sidebar from "../components/Sidebar";
 
 const EmployeesPage = () => {
@@ -68,7 +68,7 @@ const EmployeesPage = () => {
       <div className="dashboard-wrapper">
         <Sidebar />
         <div className="content">
-          <ReusableTable
+          <Table
             title="Candidates"
             columns={columns}
             data={employeeData}
