@@ -4,12 +4,6 @@ const RegisterPage = () => {
   return (
     <div className="container">
       <div className="wrapper">
-
-        {/* Left Section */}
-        <leftSectionAuth />
-
-        {/* Right Section  */}
-
         <AuthForm
           title="Create an Account"
           fields={[
@@ -21,8 +15,8 @@ const RegisterPage = () => {
           buttonText="Register"
           linkText="Already have an account?"
           linkUrl="/login"
+          onSubmitAction="register"
         />
-        
       </div>
     </div>
   );

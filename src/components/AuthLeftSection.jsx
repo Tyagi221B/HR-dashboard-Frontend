@@ -14,7 +14,7 @@ const AuthLeftSection = () => {
         commodo consequat.
       </p>
       <div className="indicators">
-        <span className="active"></span>
+        <span className="activecircle"></span>
         <span></span>
         <span></span>
       </div>

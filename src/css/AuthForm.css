@@ -64,7 +64,7 @@
   transition: opacity 0.3s;
 }
 
-.indicators .active {
+.indicators .activecircle {
   opacity: 1;
 }
 

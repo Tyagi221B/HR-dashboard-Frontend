@@ -4,10 +4,6 @@ const LoginPage = () => {
   return (
     <div className="container">
       <div className="wrapper">
-        {/* Left Side */}
-        <leftSectionAuth />
-
-        {/* Right Side (Using AuthForm) */}
         <AuthForm
           title="Welcome to Dashboard"
           fields={[
@@ -18,6 +14,7 @@ const LoginPage = () => {
           linkText="Don't have an account?"
           linkUrl="/register"
           forgotPassword={true}
+          onSubmitAction="login"
         />
       </div>
     </div>
