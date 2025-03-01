@@ -3,11 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import "../css/AuthForm.css";
 import AuthLeftSection from "./AuthLeftSection";
 import { registerUser, loginUser } from "../api/authApi";
+import { useAuth } from "../context/AuthContext"; // Import AuthContext
 
 const AuthForm = ({ title, fields, buttonText, linkText, linkUrl, forgotPassword, onSubmitAction }) => {
+
+
   const [formData, setFormData] = useState({});
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth(); 
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,7 +27,8 @@ const AuthForm = ({ title, fields, buttonText, linkText, linkUrl, forgotPassword
         await registerUser(formData);
         navigate("/login");
       } else if (onSubmitAction === "login") {
-        await loginUser(formData);
+        const userData = await loginUser(formData); 
+        login(userData); 
         navigate("/"); 
       }
     } catch (err) {

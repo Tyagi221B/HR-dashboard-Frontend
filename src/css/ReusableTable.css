@@ -2,9 +2,13 @@
 .table-container {
   width: 100%;
   background-color: #fff;
-  border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+  background: #f6f3f7;
+  overflow-y: auto;
+  /* border: 2px solid red; */
+  height: 100vh;
+
 }
 
 .table-header {
@@ -13,6 +17,8 @@
   align-items: center;
   padding: 16px;
   border-bottom: 1px solid #eaeaea;
+  /* border: 2px solid red; */
+
 }
 
 .table-title {
@@ -24,7 +30,11 @@
 
 .table-controls {
   display: flex;
+  justify-content: space-between;
   gap: 16px;
+  /* border: 2px solid red; */
+  width: 100vw;
+  align-items: center;
 }
 
 .search-container {
@@ -40,13 +50,6 @@
   font-size: 14px;
 }
 
-.search-input {
-  padding: 8px 12px 8px 35px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  width: 250px;
-  font-size: 14px;
-}
 
 .filter-container {
   position: relative;
@@ -64,6 +67,14 @@
 
 .table-wrapper {
   overflow-x: auto;
+  /* border: 2px solid orange; */
+  border-radius: 20px;
+  height: 70vh;
+  margin-left: 10px;
+  margin-right: 10px;
+  background: white;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+
 }
 
 .data-table {

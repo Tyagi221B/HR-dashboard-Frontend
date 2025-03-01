@@ -15,7 +15,7 @@ const ReusableTable = ({
   const [sortDirection, setSortDirection] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [tableData, setTableData] = useState(data); // State to hold updated data
+  const [tableData, setTableData] = useState(data);
 
   // Handle column sorting
   const handleSort = (column) => {
@@ -67,20 +67,18 @@ const ReusableTable = ({
   return (
     <div className="table-container">
       <div className="table-header">
-        <h2 className="table-title">{title}</h2>
-
-        <div className="table-controls">
-          {/* Search input */}
-          <div className="search-container">
-            <span className="search-icon">🔍</span>
-            <input
-              type="text"
-              placeholder={searchPlaceholder}
-              className="search-input"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+        <div className="navtop">
+          <h2 className="table-title">{title}</h2>
+          <div className="navright">
+            <img src="/icons/mail.svg" alt="mail" width={30} height={30} />
+            <img src="/icons/bell.svg" alt="mail" width={30} height={30} />
+            <img src="/images/profile.png" alt="mail" width={30} height={30} />
+            <img src="/icons/down.svg" alt="mail" width={10} height={20} />
           </div>
+        </div>
+      </div>
+      <div className="table-header">
+        <div className="table-controls">
 
           {/* Filter dropdown */}
           {filterOptions.length > 0 && (
@@ -99,6 +97,23 @@ const ReusableTable = ({
               </select>
             </div>
           )}
+
+          <div className="nav2right">
+            {/* Search input */}
+          <div className="search-box">
+          <img src="/icons/search.svg" alt="Search" width={20} height={20} />
+            <input
+              type="text"
+              placeholder={searchPlaceholder}
+              className="search-input"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <button>
+            Add Candidate
+          </button>
+          </div>
         </div>
       </div>
 
@@ -197,11 +212,17 @@ const getStatusStyles = (status) => {
         backgroundColor: "#FEF3C7",
       }; // Yellow
     case "approved":
-    case "selected": 
+    case "selected":
       return {
         color: "#047857",
         borderColor: "#10B981",
         backgroundColor: "#D1FAE5",
+      }; // Green
+    case "interviewed":
+      return {
+        color: "#1ABC9C",
+        borderColor: "#1ABC9C",
+        backgroundColor: "#E0F7F4",
       }; // Green
     case "rejected":
       return {

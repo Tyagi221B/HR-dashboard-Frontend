@@ -77,7 +77,8 @@ const LeavePage = () => {
   };
 
   return (
-    <div className="dashboard-wrapper">
+    <div className="page">
+      <div className="dashboard-wrapper">
       <Sidebar />
       <div className="content">
         <div className="leave-container">
@@ -121,6 +122,7 @@ const LeavePage = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

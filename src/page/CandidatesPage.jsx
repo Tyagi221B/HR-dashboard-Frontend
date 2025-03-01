@@ -67,12 +67,12 @@ const handleRowAction = (row) => {
 
 const CandidatesPage = () => {
   return (
-    <div className="">
+    <div className="page">
       <div className="dashboard-wrapper">
         <Sidebar />
         <div className="content">
           <ReusableTable
-            title="Employees"
+            title="Candidates"
             columns={columns}
             data={employeeData}
             onRowAction={handleRowAction}

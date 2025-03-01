@@ -1,11 +1,21 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "../css/Sidebar.css";
+import { useAuth } from "../context/AuthContext";
+
 
 const Sidebar = () => {
+
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
   return (
     <div className="sidebar">
       <div className="logo">
-      <img src="/icons/logo.svg" alt="Search" width={20} height={20} />
+      <img src="/icons/logo.svg" alt="logo" width={20} height={20} />
       <div className="">LOGO</div>
       </div>
 
@@ -15,12 +25,14 @@ const Sidebar = () => {
         <input type="text" placeholder="Search" />
       </div>
 
+      <div className="addmargin"></div>
+
       {/* Recruitment */}
       <div className="menu-title">
         <h5>Recruitment</h5>
         <ul>
           <li>
-            <NavLink to="/candidates" className="menu-item" activeClassName="active">
+            <NavLink to="/" className="menu-item" activeClassName="active">
               <img src="/icons/candidates.svg" alt="Candidates" width={20} height={20} />
               <span>Candidates</span>
             </NavLink>
@@ -57,12 +69,12 @@ const Sidebar = () => {
       <div className="menu-title">
         <h5>Others</h5>
         <ul>
-          <li>
-            <NavLink to="/logout" className="menu-item" activeClassName="active">
+          <div className="menu-item">
+          <li className="menu-item" onClick={handleLogout}>
               <img src="/icons/logout.svg" alt="Logout" width={20} height={20} />
               <span>Logout</span>
-            </NavLink>
           </li>
+          </div>
         </ul>
       </div>
     </div>

@@ -64,7 +64,7 @@ const EmployeesPage = () => {
   };
 
   return (
-    <div>
+    <div className="page">
       <div className="dashboard-wrapper">
         <Sidebar />
         <div className="content">
