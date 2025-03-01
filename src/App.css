@@ -10,6 +10,16 @@
 
 .dashboard-wrapper {
   display: flex;
+  background: #f6f3f7;
+  height: 100vh; /* Full height */
+  overflow: hidden; /* Prevent overall page scroll */
 }
 
 
+.content {
+  flex-grow: 1;
+  overflow-x: auto; 
+  white-space: nowrap; 
+  margin-left: 12px;
+  margin-right: 12px;
+}

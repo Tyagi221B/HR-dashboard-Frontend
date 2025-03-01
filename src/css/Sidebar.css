@@ -2,10 +2,27 @@
   width: 250px;
   height: 100vh;
   background: #f8f9fa;
-  padding: 20px;
+  padding: 40px 20px 0px 20px;
   display: flex;
   flex-direction: column;
   border-right: 1px solid #ddd;
+}
+
+
+.active {
+  position: relative;
+  padding-left: 12px; 
+}
+
+.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 12px; 
+  background-color: #4D007D; 
+  border-radius: 0px 60px 60px 0px;
 }
 
 .logo {
@@ -13,7 +30,9 @@
   font-weight: bold;
   color: #5e1fc9;
   margin-bottom: 20px;
-  text-align: center;
+  text-align: left;
+  display: flex;
+  gap: 10px;
 }
 
 .search-box {

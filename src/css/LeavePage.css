@@ -1,0 +1,78 @@
+.leave-container {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.table-section {
+  flex: 2;
+}
+
+.rightsection{
+  border-radius: 8px;
+  margin-right: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-section {
+  flex: 1;
+  background: #fff;
+  padding: 20px;
+  
+}
+
+.calendar-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.leave-calendar {
+  width: 100%;
+  border: none;
+}
+
+.react-calendar {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.react-calendar__tile--active {
+  background: #6a0dad !important;
+  color: white !important;
+}
+
+.react-calendar__tile--now {
+  background: #f0f0f0;
+  color: black;
+}
+
+.approved-leaves-section {
+  padding: 15px;
+}
+
+.approved-leaves-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.approved-leaves-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.approved-leave-item {
+  font-size: 14px;
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.approved-leave-item:last-child {
+  border-bottom: none;
+}
+

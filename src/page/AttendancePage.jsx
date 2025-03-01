@@ -2,65 +2,70 @@ import React from "react";
 import ReusableTable from "../components/ReusableTable";
 import Sidebar from "../components/Sidebar";
 
-const EmployeesPage = () => {
+const AttendancePage = () => {
   // Define table columns
   const columns = [
     { key: "profile", label: "Profile", sortable: false },
     { key: "name", label: "Employee Name", sortable: true },
     { key: "position", label: "Position", sortable: true },
     { key: "department", label: "Department", sortable: true },
-    { key: "email", label: "Email Address", sortable: true },
-    { key: "phone", label: "Phone Number", sortable: false },
-    { key: "joiningDate", label: "Date of Joining", sortable: true },
+    { key: "task", label: "Task", sortable: true },
+    { key: "status", label: "Status", sortable: true },
   ];
 
   // Dummy data
-  const employeeData = [
+  const attendanceData = [
     {
       id: 1,
       name: "Jane Copper",
       position: "Full Time",
       department: "Designer",
-      email: "jane.copper@example.com",
-      phone: "(704) 555-0127",
-      joiningDate: "10/06/13",
-      status: "active",
+      task: "Dashboard Home page Alignment",
+      status: "Present",
       profileImage: "",
     },
     {
       id: 2,
-      name: "Cody Fisher",
-      position: "Senior",
-      department: "Backend Development",
-      email: "cody.fisher@example.com",
-      phone: "(704) 555-0134",
-      joiningDate: "05/07/16",
-      status: "active",
+      name: "Arlene McCoy",
+      position: "Full Time",
+      department: "Designer",
+      task: "Dashboard Login page design, Dashboard Home page design",
+      status: "Absent",
       profileImage: "",
     },
     {
       id: 3,
-      name: "Arlene McCoy",
-      position: "Full Time",
-      department: "Designer",
-      email: "arlene.mccoy@example.com",
-      phone: "(704) 555-0156",
-      joiningDate: "12/09/17",
-      status: "inactive",
+      name: "Cody Fisher",
+      position: "Senior",
+      department: "Backend Development",
+      task: "--",
+      status: "Absent",
+      profileImage: "",
+    },
+    {
+      id: 4,
+      name: "Janney Wilson",
+      position: "Junior",
+      department: "Backend Development",
+      task: "Dashboard login page integration",
+      status: "Present",
       profileImage: "",
     },
   ];
 
   // Status filter options
   const filterOptions = [
-    { value: "active", label: "Active" },
-    { value: "inactive", label: "Inactive" },
+    { value: "present", label: "Present" },
+    { value: "absent", label: "Absent" },
   ];
+
+const statusOptions = ["Present", "Absent"];
+
 
   // Action handler
   const handleRowAction = (row) => {
     console.log("Action clicked for:", row);
-    // Here you would typically open a modal, navigate to a detail page, etc.
+    // Here you could open a modal to edit attendance, mark present/absent, etc.
   };
 
   return (
@@ -69,11 +74,12 @@ const EmployeesPage = () => {
         <Sidebar />
         <div className="content">
           <ReusableTable
-            title="Candidates"
+            title="Attendance"
             columns={columns}
-            data={employeeData}
+            data={attendanceData}
             onRowAction={handleRowAction}
             filterOptions={filterOptions}
+            statusOptions={statusOptions}
             searchPlaceholder="Search employees..."
             showProfileImages={true}
           />
@@ -83,4 +89,4 @@ const EmployeesPage = () => {
   );
 };
 
-export default EmployeesPage;
+export default AttendancePage;
