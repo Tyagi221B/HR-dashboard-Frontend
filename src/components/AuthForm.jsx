@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../css/AuthForm.css";
 import AuthLeftSection from "./AuthLeftSection";
 import { registerUser, loginUser } from "../api/authApi";
-import { useAuth } from "../context/AuthContext"; // Import AuthContext
+import { useAuth } from "../context/useAuth.js"; // Import AuthContext
 
 const AuthForm = ({ title, fields, buttonText, linkText, linkUrl, forgotPassword, onSubmitAction }) => {
 

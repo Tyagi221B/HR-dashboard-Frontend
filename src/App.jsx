@@ -7,11 +7,13 @@ import LoginPage from "./page/LoginPage";
 import RegistrationPage from "./page/RegistrationPage";
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./routes/ProtectedRoute";
-
-
+import { Toaster } from "react-hot-toast"; 
 function App() {
   return (
+    <>
+    <Toaster position="top-right" reverseOrder={false} />
     <Routes>
+      
       <Route
         path="/employees"
         element={
@@ -47,6 +49,7 @@ function App() {
       <Route path="/register" element={<RegistrationPage />} />
       <Route path="/login" element={<LoginPage />} />
     </Routes>
+    </>
   );
 }
 
