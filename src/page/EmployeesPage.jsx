@@ -69,7 +69,7 @@ const EmployeesPage = () => {
         <Sidebar />
         <div className="content">
           <Table
-            title="Candidates"
+            title="Employees"
             columns={columns}
             data={employeeData}
             onRowAction={handleRowAction}
