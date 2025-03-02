@@ -6,19 +6,20 @@ const Table = ({
   columns,
   data,
   onRowAction,
+  onStatusChange,
   filterOptions = [],
   statusOptions = [],
   showAddButton = false,
   searchPlaceholder = "Search",
   addButtonText = "Add",
   showProfileImages = false,
-  onButtonClick 
+  onButtonClick,
 }) => {
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [tableData, setTableData] = useState(data);
+  const [activeDropdown, setActiveDropdown] = useState(null);
 
   // Handle column sorting
   const handleSort = (column) => {
@@ -32,16 +33,21 @@ const Table = ({
 
   // Handle status change in dropdown
   const handleStatusChange = (id, newStatus) => {
-    setTableData((prevData) =>
-      prevData.map((item) =>
-        item.id === id ? { ...item, status: newStatus } : item
-      )
-    );
-    console.log(`Updated status for ID ${id}: ${newStatus}`);
+    onStatusChange(id, newStatus);
   };
 
-  // Filter data based on search and status
-  const filteredData = tableData.filter((item) => {
+  // Toggle action dropdown
+  const toggleDropdown = (id) => {
+    setActiveDropdown(activeDropdown === id ? null : id);
+  };
+
+  // Handle action selection
+  const handleAction = (row, action) => {
+    onRowAction(row, action);
+    setActiveDropdown(null);
+  };
+
+  const filteredData = data.filter((item) => {
     const matchesSearch = Object.values(item).some(
       (value) =>
         value &&
@@ -82,7 +88,6 @@ const Table = ({
       </div>
       <div className="table-header">
         <div className="table-controls">
-
           {/* Filter dropdown */}
           {filterOptions.length > 0 && (
             <div className="filter-container">
@@ -103,20 +108,24 @@ const Table = ({
 
           <div className="nav2right">
             {/* Search input */}
-          <div className="search-box">
-          <img src="/icons/search.svg" alt="Search" width={20} height={20} />
-            <input
-              type="text"
-              placeholder={searchPlaceholder}
-              className="search-input"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          {showAddButton && 
-          <button onClick={onButtonClick}>
-            {addButtonText}
-          </button>}
+            <div className="search-box">
+              <img
+                src="/icons/search.svg"
+                alt="Search"
+                width={20}
+                height={20}
+              />
+              <input
+                type="text"
+                placeholder={searchPlaceholder}
+                className="search-input"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            {showAddButton && (
+              <button onClick={onButtonClick}>{addButtonText}</button>
+            )}
           </div>
         </div>
       </div>
@@ -171,9 +180,12 @@ const Table = ({
                       ) : column.key === "status" ? (
                         <StatusDropdown
                           value={row.status}
-                          onChange={(e) =>
-                            handleStatusChange(row.id, e.target.value)
-                          }
+                          onChange={(e) => {
+                            const newStatus = e.target.value;
+                            if (row.status !== newStatus) {
+                              handleStatusChange(row.id, newStatus);
+                            }
+                          }}
                           statusOptions={statusOptions}
                         />
                       ) : (
@@ -181,13 +193,31 @@ const Table = ({
                       )}
                     </td>
                   ))}
-                  <td>
-                    <button
-                      onClick={() => onRowAction(row)}
-                      className="action-button"
-                    >
-                      ⋮
-                    </button>
+                  <td className="action-cell">
+                    <div className="action-dropdown-container">
+                      <button
+                        onClick={() => toggleDropdown(row.id)}
+                        className="action-button"
+                      >
+                        ⋮
+                      </button>
+                      {activeDropdown === row.id && (
+                        <div className="action-dropdown">
+                          <button
+                            className="dropdown-item"
+                            onClick={() => handleAction(row, "download")}
+                          >
+                            Download Resume
+                          </button>
+                          <button
+                            className="dropdown-item"
+                            onClick={() => handleAction(row, "delete")}
+                          >
+                            Delete Candidate
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))

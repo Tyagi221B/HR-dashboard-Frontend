@@ -17,12 +17,31 @@ export const getAllCandidates = async () => {
   return data;
 };
 
+export const getResume = async (id) => {
+  const { data } = await axios.get(`/candidate/resume/${id}`, { withCredentials: true });
+  return data;
+};
+
 export const deleteCandidate = async (id) => {
   const { data } = await axios.delete(`/candidate/delete/${id}`, { withCredentials: true });
   return data;
 };
 
 export const updateCandidateStatus = async (id, status) => {
-  const { data } = await axios.put(`/candidate/status/${id}`, { status }, { withCredentials: true });
-  return data;
+  try {
+    const { data } = await axios.put(
+      `/candidate/status/${id}`,
+      { status },
+      {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json', // Explicitly setting JSON type
+        }
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(`Error updating candidate ${id} status:`, error.response?.data || error.message);
+    throw error;
+  }
 };

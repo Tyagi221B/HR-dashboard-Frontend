@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
           logout();
         }
       } else {
-        console.log("No user found in localStorage.");
+        console.log("User session expired. Logging out");
       }
   
       setLoading(false);

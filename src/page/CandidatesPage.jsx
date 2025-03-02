@@ -7,6 +7,7 @@ import {
   addCandidate,
   updateCandidateStatus,
   deleteCandidate,
+  getResume,
 } from "../api/candidateAPI";
 import { toast } from "react-hot-toast";
 import SkeletonLoader from "../components/Loader";
@@ -122,6 +123,26 @@ const CandidatesPage = () => {
     }
   };
 
+  const handleDownloadResume = async (id) => {
+    try {
+      toast.loading("Fetching resume...");
+      const response = await getResume(id);
+      toast.dismiss();
+      
+      if (response && response.data && response.data.resumeUrl) {
+        // Open resume in a new tab
+        window.open(response.data.resumeUrl, '_blank');
+      } else {
+        toast.error("Resume URL not found");
+      }
+    } catch (error) {
+      toast.dismiss();
+      console.error("Error fetching resume:", error);
+      toast.error("Failed to fetch resume");
+    }
+  };
+
+
   // Action handler for row operations
   const handleRowAction = (row, action) => {
     if (action === "delete") {
@@ -129,6 +150,10 @@ const CandidatesPage = () => {
     } else if (action === "status") {
       // This would be handled by a dropdown in the table component
       console.log("Status change handled in the Table component");
+    }
+    else if(action === "download") {
+      console.log("Download handled here");
+      handleDownloadResume(row.id);
     }
   };
 
