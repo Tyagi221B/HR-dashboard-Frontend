@@ -52,20 +52,42 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // For edit mode, pdf is optional
-    if (
-      !formData.fullName ||
-      !formData.email ||
-      !formData.phone ||
-      !formData.position ||
-      !formData.experience ||
-      !formData.department ||
-      !formData.dateOfJoining ||
-      (!editData && !formData.pdfFile) // PDF required for new, optional for edit
-    ) {
-      alert("Please fill in all required fields");
+    if (!declaration) {
+      alert("Please accept the declaration to continue");
       return;
+    }
+
+    // Modified validation for edit mode
+    if (editData) {
+      // For edit mode, only validate fields that are required and have changed
+      if (
+        !formData.fullName ||
+        !formData.email ||
+        !formData.phone ||
+        !formData.position ||
+        !formData.experience ||
+        !formData.department ||
+        !formData.dateOfJoining
+      ) {
+        alert("Please fill in all required fields");
+        return;
+      }
+      // PDF is optional for edits, no validation needed
+    } else {
+      // For new candidates, all fields including PDF are required
+      if (
+        !formData.fullName ||
+        !formData.email ||
+        !formData.phone ||
+        !formData.position ||
+        !formData.experience ||
+        !formData.department ||
+        !formData.dateOfJoining ||
+        !formData.pdfFile
+      ) {
+        alert("Please fill in all required fields");
+        return;
+      }
     }
 
     const candidateData = new FormData();
@@ -85,8 +107,7 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
       candidateData.append("pdfFile", formData.pdfFile);
     }
 
-    // Pass the edit mode flag to onSubmit
-    onSubmit(candidateData, editData ? editData.id : null);
+    onSubmit(candidateData);
   };
 
   const modalTitle = editData ? "Edit Candidate" : "Add New Candidate";
@@ -109,6 +130,31 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
     setDeclaration(false);
     setFileName("");
   };
+
+  useEffect(() => {
+    if (editData) {
+      // Format the date to YYYY-MM-DD for the date input
+      const formattedDate = editData.dateOfJoining
+        ? new Date(editData.dateOfJoining).toISOString().split("T")[0]
+        : "";
+
+      setFormData({
+        fullName: editData.fullName || "",
+        email: editData.email || "",
+        phone: editData.phone || "",
+        position: editData.position || "",
+        experience: editData.experience || "",
+        department: editData.department || "",
+        dateOfJoining: formattedDate,
+        pdfFile: null, // We don't edit the PDF file directly
+      });
+
+      // Pre-check declaration for edit mode
+      setDeclaration(true);
+    } else {
+      resetForm();
+    }
+  }, [editData, isOpen]);
 
   const handleClose = () => {
     resetForm();
@@ -231,10 +277,18 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
 
                 <div className="form-group">
                   <label>
-                    Resume<span className="required">*</span>
+                    Resume{" "}
+                    {editData ? (
+                      "(Optional)"
+                    ) : (
+                      <span className="required">*</span>
+                    )}
                   </label>
                   <div className="resume-upload">
-                    <span>{fileName || "Upload"}</span>
+                    <span>
+                      {fileName ||
+                        (editData ? "Keep existing resume" : "Upload")}
+                    </span>
                     <input
                       type="file"
                       name="resume"
@@ -242,7 +296,7 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
                       id="resume-input"
                       className="file-input"
                       accept=".pdf,.doc,.docx"
-                      required
+                      required={!editData} // Only required for new candidates
                     />
                     <label htmlFor="resume-input" className="upload-icon">
                       <svg
