@@ -14,6 +14,7 @@ const Table = ({
   addButtonText = "Add",
   showProfileImages = false,
   onButtonClick,
+  customActions = [],
 }) => {
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
@@ -203,18 +204,32 @@ const Table = ({
                       </button>
                       {activeDropdown === row.id && (
                         <div className="action-dropdown">
-                          <button
-                            className="dropdown-item"
-                            onClick={() => handleAction(row, "download")}
-                          >
-                            Download Resume
-                          </button>
-                          <button
-                            className="dropdown-item"
-                            onClick={() => handleAction(row, "delete")}
-                          >
-                            Delete Candidate
-                          </button>
+                          {customActions.length > 0 ? (
+                            customActions.map((action, index) => (
+                              <button
+                                key={index}
+                                className="dropdown-item"
+                                onClick={() => handleAction(row, action.type)}
+                              >
+                                {action.label}
+                              </button>
+                            ))
+                          ) : (
+                            <>
+                              <button
+                                className="dropdown-item"
+                                onClick={() => handleAction(row, "download")}
+                              >
+                                Download Resume
+                              </button>
+                              <button
+                                className="dropdown-item"
+                                onClick={() => handleAction(row, "delete")}
+                              >
+                                Delete Candidate
+                              </button>
+                            </>
+                          )}
                         </div>
                       )}
                     </div>

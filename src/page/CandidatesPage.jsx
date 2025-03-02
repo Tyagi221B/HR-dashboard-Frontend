@@ -8,6 +8,7 @@ import {
   updateCandidateStatus,
   deleteCandidate,
   getResume,
+  updateCandidate,
 } from "../api/candidateAPI";
 import { toast } from "react-hot-toast";
 import SkeletonLoader from "../components/Loader";
@@ -33,6 +34,9 @@ const CandidatesPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editCandidate, setEditCandidate] = useState(null);
+
+  
 
   useEffect(() => {
     fetchCandidates();
@@ -70,7 +74,7 @@ const CandidatesPage = () => {
     }
   };
 
-  const handleAddCandidate = async (formData) => {
+  const handleAddCandidate = async (formData, candidateId = null) => {
     if (
       !formData.get("fullName") ||
       !formData.get("email") ||
@@ -80,23 +84,33 @@ const CandidatesPage = () => {
       return;
     }
 
-    // console.log(formData.get("fullName"));
-    // console.log(formData.get("email"));
-    // console.log(formData.get("dateOfJoining"));
-    // console.log(formData.get("pdfFile"));
-
     try {
       setIsModalOpen(false);
-      toast.loading("Adding candidate...");
-      await addCandidate(formData);
-      toast.dismiss();
-      toast.success("Candidate added successfully");
+      
+      if (candidateId) {
+        toast.loading("Updating candidate...");
+        await updateCandidate(candidateId, formData);
+        toast.dismiss();
+        toast.success("Candidate updated successfully");
+      } else {
+        toast.loading("Adding candidate...");
+        await addCandidate(formData);
+        toast.dismiss();
+        toast.success("Candidate added successfully");
+      }
+      
+      setEditCandidate(null);
       await fetchCandidates();
     } catch (error) {
       toast.dismiss();
-      console.error("Error adding candidate:", error);
-      toast.error(error.response?.data?.message || "Failed to add candidate");
+      console.error("Error saving candidate:", error);
+      toast.error(error.response?.data?.message || "Failed to save candidate");
     }
+  };
+
+  const handleEditCandidate = (candidate) => {
+    setEditCandidate(candidate);
+    setIsModalOpen(true);
   };
 
   const handleStatusChange = async (id, newStatus) => {
@@ -143,19 +157,22 @@ const CandidatesPage = () => {
   };
 
 
-  // Action handler for row operations
+
   const handleRowAction = (row, action) => {
     if (action === "delete") {
       handleDeleteCandidate(row.id);
-    } else if (action === "status") {
-      // This would be handled by a dropdown in the table component
-      console.log("Status change handled in the Table component");
-    }
-    else if(action === "download") {
-      console.log("Download handled here");
+    } else if (action === "download") {
       handleDownloadResume(row.id);
+    } else if (action === "edit") {
+      handleEditCandidate(row);
     }
   };
+
+  const customTableActions = [
+    { type: "edit", label: "Edit Candidate" },
+    { type: "download", label: "Download Resume" },
+    { type: "delete", label: "Delete Candidate" },
+  ];
 
   return (
     <div className="page">
@@ -180,15 +197,23 @@ const CandidatesPage = () => {
               searchPlaceholder="Search candidates..."
               showProfileImages={false}
               loading={loading}
-              onButtonClick={() => setIsModalOpen(true)}
+              onButtonClick={() => {
+                setEditCandidate(null); // Reset edit state for add mode
+                setIsModalOpen(true);
+              }}
+              customActions={customTableActions} // Add the custom actions
             />
           )}
         </div>
       </div>
       <AddCandidateModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={(data) => handleAddCandidate(data)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditCandidate(null);
+        }}
+        onSubmit={(data) => handleAddCandidate(data, editCandidate?.id)}
+        editData={editCandidate} // Pass the edit data
       />
     </div>
   );

@@ -12,6 +12,25 @@ export const addCandidate = async (candidateData) => {
   return data;
 };
 
+export const updateCandidate = async (id, updatedData) => {
+  try {
+    const { data } = await axios.put(
+      `/candidate/update/${id}`,
+      updatedData,
+      {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(`Error updating candidate :`, error.response?.data || error.message);
+    throw error;
+  }
+};
+
 export const getAllCandidates = async () => {
   const { data } = await axios.get("/candidate/getall", { withCredentials: true });
   return data;
@@ -45,3 +64,4 @@ export const updateCandidateStatus = async (id, status) => {
     throw error;
   }
 };
+

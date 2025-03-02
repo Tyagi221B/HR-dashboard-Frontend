@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../css/Modal.css";
 
-const AddCandidateModal = ({ isOpen, onClose, onSubmit }) => {
+const AddCandidateModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -12,6 +12,24 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit }) => {
     dateOfJoining: "",
     pdfFile: null,
   });
+
+  useEffect(() => {
+    if (editData) {
+      setFormData({
+        fullName: editData.fullName || "",
+        email: editData.email || "",
+        phone: editData.phone || "",
+        position: editData.position || "",
+        experience: editData.experience || "",
+        department: editData.department || "",
+        dateOfJoining: editData.dateOfJoining || "",
+        pdfFile: null,
+      });
+      setDeclaration(true);
+    } else {
+      resetForm();
+    }
+  }, [editData, isOpen]);
 
   const [declaration, setDeclaration] = useState(false);
   const [fileName, setFileName] = useState("");
@@ -26,20 +44,16 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit }) => {
     if (file) {
       setFormData((prev) => ({
         ...prev,
-        pdfFile: file, 
+        pdfFile: file,
       }));
       setFileName(file.name);
     }
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!declaration) {
-      alert("Please accept the declaration to continue");
-      return;
-    }
 
+    // For edit mode, pdf is optional
     if (
       !formData.fullName ||
       !formData.email ||
@@ -48,7 +62,7 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit }) => {
       !formData.experience ||
       !formData.department ||
       !formData.dateOfJoining ||
-      !formData.pdfFile
+      (!editData && !formData.pdfFile) // PDF required for new, optional for edit
     ) {
       alert("Please fill in all required fields");
       return;
@@ -63,14 +77,23 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit }) => {
     candidateData.append("experience", formData.experience);
     candidateData.append("department", formData.department);
 
-    
-    const date = String(formData.dateOfJoining)
-
+    const date = String(formData.dateOfJoining);
     candidateData.append("dateOfJoining", date);
-    candidateData.append("pdfFile", formData.pdfFile);
 
-    onSubmit(candidateData);
+    // Only append file if one is selected (for both new and edit)
+    if (formData.pdfFile) {
+      candidateData.append("pdfFile", formData.pdfFile);
+    }
+
+    // Pass the edit mode flag to onSubmit
+    onSubmit(candidateData, editData ? editData.id : null);
   };
+
+  const modalTitle = editData ? "Edit Candidate" : "Add New Candidate";
+
+  const resumeLabel = editData
+    ? "Resume (Optional - Leave empty to keep current resume)"
+    : "Resume*";
 
   const resetForm = () => {
     setFormData({
@@ -99,7 +122,7 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit }) => {
       <div className="candidate-modal">
         {/* Header */}
         <div className="modal-header">
-          <h2>Add New Candidate</h2>
+          <h2>{modalTitle}</h2>
           <button className="close-button" onClick={handleClose}>
             ×
           </button>
@@ -113,7 +136,8 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit }) => {
               <div className="form-column">
                 <div className="form-group">
                   <label>
-                    Full Name<span className="required">*</span>
+                    {resumeLabel}
+                    {!editData && <span className="required">*</span>}
                   </label>
                   <input
                     type="text"
