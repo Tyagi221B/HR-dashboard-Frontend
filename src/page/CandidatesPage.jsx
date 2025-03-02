@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Table from "../components/Table";
+import AddCandidateModal from "../components/AddCandidateModal"; // Import modal
 
 const columns = [
   { key: "srNo", label: "Sr No.", sortable: false },
@@ -62,10 +63,16 @@ const filterOptions = [
 // Action handler
 const handleRowAction = (row) => {
   console.log("Action clicked for:", row);
-  // Here you would typically open a modal, navigate to a detail page, etc.
 };
 
 const CandidatesPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleAddCandidate = (formData) => {
+    console.log("Submitting Candidate:", formData);
+    setIsModalOpen(false); // Close modal after submission
+  };
+
   return (
     <div className="page">
       <div className="dashboard-wrapper">
@@ -82,9 +89,18 @@ const CandidatesPage = () => {
             showAddButton={true}
             searchPlaceholder="Search employees..."
             showProfileImages={true}
+            onButtonClick={() => {
+              console.log("Button clicked! Opening modal...");
+              setIsModalOpen(true);
+            }}
           />
         </div>
       </div>
+      <AddCandidateModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleAddCandidate}
+      />
     </div>
   );
 };

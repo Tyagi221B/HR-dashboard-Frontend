@@ -12,6 +12,7 @@ const Table = ({
   searchPlaceholder = "Search",
   addButtonText = "Add",
   showProfileImages = false,
+  onButtonClick 
 }) => {
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
@@ -112,7 +113,8 @@ const Table = ({
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          {showAddButton && <button>
+          {showAddButton && 
+          <button onClick={onButtonClick}>
             {addButtonText}
           </button>}
           </div>
