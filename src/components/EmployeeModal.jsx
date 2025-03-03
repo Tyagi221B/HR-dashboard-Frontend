@@ -35,6 +35,9 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
     setFileName("");
   };
 
+  console.log(editData.dateOfJoining); // undefined
+  console.log(editData.salary); // 2
+
   useEffect(() => {
     if (editData) {
       const formattedDate = editData.dateOfJoining
@@ -49,7 +52,7 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
         experience: editData.experience || "",
         department: editData.department || "",
         dateOfJoining: formattedDate,
-        salary: editData.salary || "",
+        salary: editData.salary,
         status: editData.status || "Active",
         pdfFile: null,
       });

@@ -50,10 +50,12 @@ const EmployeesPage = () => {
         phone: employee.phone,
         position: employee.position,
         department: employee.department,
+        dateOfJoining: employee.dateOfJoining,
         joiningDate: formatDate(employee.dateOfJoining),
         experience: employee.experience,
         profileImage: employee.profileImage || "", 
-        candidateId: employee.candidateId
+        candidateId: employee.candidateId,
+        salary: employee.salary
       }));
 
       setEmployees(formattedEmployees);

@@ -13,24 +13,6 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
     pdfFile: null,
   });
 
-  // useEffect(() => {
-  //   if (editData) {
-  //     setFormData({
-  //       fullName: editData.fullName || "",
-  //       email: editData.email || "",
-  //       phone: editData.phone || "",
-  //       position: editData.position || "",
-  //       experience: editData.experience || "",
-  //       department: editData.department || "",
-  //       dateOfJoining: editData.dateOfJoining || "",
-  //       pdfFile: null,
-  //     });
-  //     setDeclaration(true);
-  //   } else {
-  //     resetForm();
-  //   }
-  // }, [editData, isOpen]);
-
   const [declaration, setDeclaration] = useState(false);
   const [fileName, setFileName] = useState("");
 
