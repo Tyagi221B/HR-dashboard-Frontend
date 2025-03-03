@@ -127,7 +127,7 @@ const LeavePage = () => {
       toast.success(`Status updated to ${newStatus}`);
     } catch (error) {
       console.error("Error updating status:", error);
-      toast.error("Failed to update status");
+      toast.error("Only present employee leave can be approved");
     }
   };
 
