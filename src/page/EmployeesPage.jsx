@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Table from "../components/Table";
 import Sidebar from "../components/Sidebar";
-import { getAllEmployees, deleteEmployee, updateEmployee } from "../api/employeeAPI";
+import {
+  getAllEmployees,
+  deleteEmployee,
+  updateEmployee,
+} from "../api/employeeAPI";
 import { toast } from "react-hot-toast";
 import SkeletonLoader from "../components/Loader";
 import EditEmployeeModal from "../components/EmployeeModal";
@@ -30,9 +34,6 @@ const EmployeesPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editEmployee, setEditEmployee] = useState(null);
 
-
-  
-
   const fetchEmployees = useCallback(async () => {
     try {
       setLoading(true);
@@ -53,9 +54,9 @@ const EmployeesPage = () => {
         dateOfJoining: employee.dateOfJoining,
         joiningDate: formatDate(employee.dateOfJoining),
         experience: employee.experience,
-        profileImage: employee.profileImage || "", 
+        profileImage: employee.profileImage || "",
         candidateId: employee.candidateId,
-        salary: employee.salary
+        salary: employee.salary,
       }));
 
       setEmployees(formattedEmployees);
@@ -74,10 +75,10 @@ const EmployeesPage = () => {
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-In', { 
-      day: '2-digit', 
-      month: '2-digit', 
-      year: '2-digit' 
+    return date.toLocaleDateString("en-In", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
     });
   };
 
@@ -93,28 +94,29 @@ const EmployeesPage = () => {
         toast.success("Employee deleted successfully");
         fetchEmployees();
       } catch (error) {
-        console.error("Error deleting employee:", error);
-        toast.error("Failed to delete employee");
+        const errorMessage =
+          error.response?.data?.message || "Failed to delete employee";
+
+        toast.error(errorMessage);
       }
     }
   };
 
   const handleUpdateEmployee = async (formData, employeeId) => {
-
     if (
-          !formData.get("fullName") ||
-          !formData.get("email") ||
-          !formData.get("phone")
-        ) {
-          toast.error("Please fill in all required fields.");
-          return;
-        }
+      !formData.get("fullName") ||
+      !formData.get("email") ||
+      !formData.get("phone")
+    ) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
 
-        // TODO: complete this add more checks
+    // TODO: complete this add more checks
     try {
       setIsModalOpen(false);
 
-      if(employeeId){
+      if (employeeId) {
         toast.loading("Updating employee...");
         await updateEmployee(employeeId, formData);
         toast.dismiss();
@@ -169,14 +171,16 @@ const EmployeesPage = () => {
       </div>
       {isModalOpen && (
         <EditEmployeeModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setEditEmployee(null);
-        }}
-        onSubmit={(employeeData) => handleUpdateEmployee(employeeData, editEmployee?.id)}
-        editData={editEmployee} 
-      />
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditEmployee(null);
+          }}
+          onSubmit={(employeeData) =>
+            handleUpdateEmployee(employeeData, editEmployee?.id)
+          }
+          editData={editEmployee}
+        />
       )}
     </div>
   );
