@@ -90,9 +90,6 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
 
   const modalTitle = editData ? "Edit Candidate" : "Add New Candidate";
 
-  const resumeLabel = editData
-    ? "Resume (Optional - Leave empty to keep current resume)"
-    : "Resume*";
 
   const resetForm = () => {
     setFormData({
@@ -158,8 +155,8 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
               <div className="form-column">
                 <div className="form-group">
                   <label>
-                    {resumeLabel}
-                    {!editData && <span className="required">*</span>}
+                    Full Name
+                    <span className="required">*</span>
                   </label>
                   <input
                     type="text"

@@ -35,8 +35,8 @@ const EditEmployeeModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
     setFileName("");
   };
 
-  console.log(editData.dateOfJoining); // undefined
-  console.log(editData.salary); // 2
+  // console.log(editData.dateOfJoining);
+  // console.log(editData.salary);
 
   useEffect(() => {
     if (editData) {
