@@ -13,23 +13,23 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
     pdfFile: null,
   });
 
-  useEffect(() => {
-    if (editData) {
-      setFormData({
-        fullName: editData.fullName || "",
-        email: editData.email || "",
-        phone: editData.phone || "",
-        position: editData.position || "",
-        experience: editData.experience || "",
-        department: editData.department || "",
-        dateOfJoining: editData.dateOfJoining || "",
-        pdfFile: null,
-      });
-      setDeclaration(true);
-    } else {
-      resetForm();
-    }
-  }, [editData, isOpen]);
+  // useEffect(() => {
+  //   if (editData) {
+  //     setFormData({
+  //       fullName: editData.fullName || "",
+  //       email: editData.email || "",
+  //       phone: editData.phone || "",
+  //       position: editData.position || "",
+  //       experience: editData.experience || "",
+  //       department: editData.department || "",
+  //       dateOfJoining: editData.dateOfJoining || "",
+  //       pdfFile: null,
+  //     });
+  //     setDeclaration(true);
+  //   } else {
+  //     resetForm();
+  //   }
+  // }, [editData, isOpen]);
 
   const [declaration, setDeclaration] = useState(false);
   const [fileName, setFileName] = useState("");
@@ -57,9 +57,7 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
       return;
     }
 
-    // Modified validation for edit mode
     if (editData) {
-      // For edit mode, only validate fields that are required and have changed
       if (
         !formData.fullName ||
         !formData.email ||
@@ -72,9 +70,7 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
         alert("Please fill in all required fields");
         return;
       }
-      // PDF is optional for edits, no validation needed
     } else {
-      // For new candidates, all fields including PDF are required
       if (
         !formData.fullName ||
         !formData.email ||
@@ -133,7 +129,6 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
 
   useEffect(() => {
     if (editData) {
-      // Format the date to YYYY-MM-DD for the date input
       const formattedDate = editData.dateOfJoining
         ? new Date(editData.dateOfJoining).toISOString().split("T")[0]
         : "";
@@ -146,10 +141,9 @@ const AddCandidateModal = ({ isOpen, onClose, onSubmit, editData = null }) => {
         experience: editData.experience || "",
         department: editData.department || "",
         dateOfJoining: formattedDate,
-        pdfFile: null, // We don't edit the PDF file directly
+        pdfFile: null, 
       });
 
-      // Pre-check declaration for edit mode
       setDeclaration(true);
     } else {
       resetForm();

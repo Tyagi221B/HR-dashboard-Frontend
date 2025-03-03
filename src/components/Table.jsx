@@ -22,7 +22,6 @@ const Table = ({
   const [statusFilter, setStatusFilter] = useState("");
   const [activeDropdown, setActiveDropdown] = useState(null);
 
-  // Handle column sorting
   const handleSort = (column) => {
     if (sortColumn === column) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
@@ -32,17 +31,14 @@ const Table = ({
     }
   };
 
-  // Handle status change in dropdown
   const handleStatusChange = (id, newStatus) => {
     onStatusChange(id, newStatus);
   };
 
-  // Toggle action dropdown
   const toggleDropdown = (id) => {
     setActiveDropdown(activeDropdown === id ? null : id);
   };
 
-  // Handle action selection
   const handleAction = (row, action) => {
     onRowAction(row, action);
     setActiveDropdown(null);
@@ -62,7 +58,6 @@ const Table = ({
     return matchesSearch && matchesStatus;
   });
 
-  // Sort data
   const sortedData = sortColumn
     ? [...filteredData].sort((a, b) => {
         const aValue = a[sortColumn];

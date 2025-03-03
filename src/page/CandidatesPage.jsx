@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Sidebar from "../components/Sidebar";
 import Table from "../components/Table";
 import AddCandidateModal from "../components/AddCandidateModal";
@@ -36,13 +36,7 @@ const CandidatesPage = () => {
   const [loading, setLoading] = useState(true);
   const [editCandidate, setEditCandidate] = useState(null);
 
-  
-
-  useEffect(() => {
-    fetchCandidates();
-  }, []);
-
-  const fetchCandidates = async () => {
+  const fetchCandidates = useCallback(async () => {
     try {
       setLoading(true);
       const response = await getAllCandidates();
@@ -72,7 +66,11 @@ const CandidatesPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchCandidates();
+  }, [fetchCandidates]);
 
   const handleAddCandidate = async (formData, candidateId = null) => {
     if (
@@ -86,7 +84,7 @@ const CandidatesPage = () => {
 
     try {
       setIsModalOpen(false);
-      
+
       if (candidateId) {
         toast.loading("Updating candidate...");
         await updateCandidate(candidateId, formData);
@@ -98,7 +96,7 @@ const CandidatesPage = () => {
         toast.dismiss();
         toast.success("Candidate added successfully");
       }
-      
+
       setEditCandidate(null);
       await fetchCandidates();
     } catch (error) {
@@ -142,10 +140,10 @@ const CandidatesPage = () => {
       toast.loading("Fetching resume...");
       const response = await getResume(id);
       toast.dismiss();
-      
+
       if (response && response.data && response.data.resumeUrl) {
         // Open resume in a new tab
-        window.open(response.data.resumeUrl, '_blank');
+        window.open(response.data.resumeUrl, "_blank");
       } else {
         toast.error("Resume URL not found");
       }
@@ -155,8 +153,6 @@ const CandidatesPage = () => {
       toast.error("Failed to fetch resume");
     }
   };
-
-
 
   const handleRowAction = (row, action) => {
     if (action === "delete") {
@@ -213,7 +209,7 @@ const CandidatesPage = () => {
           setEditCandidate(null);
         }}
         onSubmit={(data) => handleAddCandidate(data, editCandidate?.id)}
-        editData={editCandidate} // Pass the edit data
+        editData={editCandidate}
       />
     </div>
   );
