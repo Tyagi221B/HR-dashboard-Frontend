@@ -53,7 +53,7 @@ export const deleteEmployee = async (id) => {
 
 export const markAttendance = async (id, attendanceData) => {
   try {
-    const response = await axiosInstance.post(`/employees/${id}/attendance`, attendanceData);
+    const response = await axiosInstance.post(`/employees/attendance/${id}`, attendanceData);
     return response.data;
   } catch (error) {
     console.error(`Error marking attendance for employee ID ${id}:`, error);
@@ -64,7 +64,7 @@ export const markAttendance = async (id, attendanceData) => {
 
 export const getEmployeeAttendance = async (id, params = {}) => {
   try {
-    const response = await axiosInstance.get(`/employees/${id}/attendance`, { params });
+    const response = await axiosInstance.get(`/employees/attendance/${id}`, { params });
     return response.data;
   } catch (error) {
     console.error(`Error fetching attendance for employee ID ${id}:`, error);

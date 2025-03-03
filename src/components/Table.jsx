@@ -263,12 +263,14 @@ const getStatusStyles = (status) => {
         backgroundColor: "#D1FAE5",
       }; // Green
     case "interviewed":
+    case "present":
       return {
         color: "#1ABC9C",
         borderColor: "#1ABC9C",
         backgroundColor: "#E0F7F4",
       }; // Green
     case "rejected":
+    case "absent":
       return {
         color: "#B91C1C",
         borderColor: "#F87171",
