@@ -1,24 +1,28 @@
-/* LeavePage.css - Simplified and Spacious Design */
+/* LeavePage.css - Refined to match mockup */
 
 .leave-container {
   display: flex;
   width: 100%;
   gap: 30px;
   height: calc(100vh - 100px);
-  padding: 15px;
+  padding: 20px;
+  background-color: #f9f9f9;
 }
 
 .leave-left {
   flex: 2;
   overflow: auto;
   min-width: 0;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .leave-right {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 30px; /* Increased gap for better separation */
+  gap: 20px;
   min-width: 320px;
 }
 
@@ -26,27 +30,32 @@
 .approved-leaves-section {
   background-color: white;
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-  padding: 20px; /* Uniform padding for all content */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 20px;
   overflow: hidden;
+}
+
+.calendar-section {
+  flex: 1.5;
+}
+
+.approved-leaves-section {
   flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
 .section-title {
   font-size: 18px;
   font-weight: 600;
-  color: #333;
-  margin: 0 0 20px 0; /* Simple bottom margin, no background */
-  padding: 0;
-  border-bottom: 2px solid #6B21A8; /* Subtle brand color accent */
-  padding-bottom: 10px;
+  color: white;
+  background-color: #4c1d95;
+  padding: 12px 16px;
+  margin: -15px -15px 15px -15px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
 .calendar-wrapper {
-  flex: 1;
-  overflow: hidden;
+  width: 100%;
 }
 
 .react-calendar {
@@ -54,6 +63,10 @@
   border: none;
   background-color: transparent;
   font-family: inherit;
+}
+
+.react-calendar button {
+  border-radius: 4px;
 }
 
 .react-calendar__tile--active {
@@ -75,22 +88,53 @@
   bottom: 5px;
   left: 50%;
   transform: translateX(-50%);
-  width: 5px;
-  height: 5px;
-  background-color: #a85021;
+  width: 6px;
+  height: 6px;
+  background-color: #6B21A8;
   border-radius: 50%;
+}
+
+/* Calendar header styling to match mockup */
+.react-calendar__navigation {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.react-calendar__navigation button {
+  min-width: 40px;
+  background: none;
+  border: none;
+  color: #555;
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #f8f8f8;
+}
+
+.react-calendar__month-view__weekdays {
+  font-weight: 600;
+  font-size: 0.9em;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  padding: 8px 0;
+  text-align: center;
+}
+
+.react-calendar__month-view__days__day {
+  padding: 10px 0;
 }
 
 .approved-leaves-list {
   overflow-y: auto;
-  flex: 1;
-  margin-top: 10px; /* Space after the title */
+  max-height: 300px;
 }
 
 .approved-leave-item {
-  padding: 15px 0;
-  border-bottom: 1px solid #f0f0f0; /* Light separator */
-  margin-bottom: 0; /* Remove margin, use padding instead */
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .approved-leave-item:last-child {
@@ -100,20 +144,19 @@
 .leave-user {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
 }
 
 .leave-user-avatar {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  background-color: #f2f2f2; /* Light fallback color */
 }
 
 .leave-user-avatar-placeholder {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background-color: #6B21A8;
   color: white;
@@ -126,27 +169,146 @@
 .leave-user-info {
   display: flex;
   flex-direction: column;
-  gap: 4px; /* Consistent spacing */
+  gap: 2px;
 }
 
 .leave-user-name {
   font-weight: 600;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .leave-user-date {
-  font-size: 13px;
+  font-size: 12px;
   color: #666;
 }
 
 .no-leaves-message {
   color: #666;
   text-align: center;
-  padding: 30px 0;
+  padding: 20px 0;
   font-style: italic;
 }
 
-/* Modal Styles - Simplified */
+/* Table styling to match mockup */
+.table-container {
+  width: 100%;
+  overflow: auto;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.table-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.table-filters {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.table-content {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-content th {
+  text-align: left;
+  padding: 15px 20px;
+  color: #666;
+  font-weight: 600;
+  border-bottom: 1px solid #eee;
+}
+
+.table-content td {
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.table-content tr:hover {
+  background-color: #f9f9f9;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.status-badge.approved {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.status-badge.pending {
+  background-color: rgba(249, 115, 22, 0.1);
+  color: #f97316;
+}
+
+.status-badge.rejected {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+/* Status dropdown styling */
+.status-dropdown {
+  position: relative;
+}
+
+.status-dropdown select {
+  appearance: none;
+  padding: 5px 12px;
+  padding-right: 30px;
+  border-radius: 20px;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.status-dropdown.approved select {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.status-dropdown.pending select {
+  background-color: rgba(249, 115, 22, 0.1);
+  color: #f97316;
+}
+
+.status-dropdown.rejected select {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.status-dropdown::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid currentColor;
+  pointer-events: none;
+}
+
+/* Modal Styles - Refined to match mockup */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -176,10 +338,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 25px;
-  background-color: white;
   border-bottom: 1px solid #eee;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
 }
 
 .modal-header h2 {
@@ -195,10 +354,6 @@
   color: #666;
   font-size: 24px;
   cursor: pointer;
-}
-
-.close-button:hover {
-  color: #333;
 }
 
 .modal-body {
@@ -221,6 +376,7 @@
 .form-control:focus {
   border-color: #6B21A8;
   outline: none;
+  box-shadow: 0 0 0 2px rgba(107, 33, 168, 0.1);
 }
 
 .document-upload {
@@ -270,36 +426,69 @@
   background-color: #581c87;
 }
 
-/* Responsive styles - Simplified */
-@media screen and (max-width: 1100px) {
+/* Adding styling for the calendar with dates indicator as in mockup */
+.react-calendar__tile {
+  position: relative;
+  padding: 10px 0;
+}
+
+.react-calendar__tile .leave-indicator {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background-color: #6B21A8;
+  border-radius: 50%;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Add Leave button styling similar to mockup */
+.add-leave-button {
+  background-color: #6B21A8;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-leave-button:hover {
+  background-color: #581c87;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 1200px) {
   .leave-container {
-    gap: 25px;
+    gap: 20px;
   }
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 992px) {
   .leave-container {
     flex-direction: column;
     height: auto;
-    gap: 25px;
   }
   
   .leave-right {
-    flex-direction: column;
     min-width: 0;
-    gap: 25px;
   }
   
   .calendar-section, 
   .approved-leaves-section {
-    height: auto;
     min-height: 300px;
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
   .leave-container {
-    padding: 10px;
+    padding: 15px;
   }
   
   .calendar-section, 
@@ -307,23 +496,38 @@
     padding: 15px;
   }
   
-  .section-title {
-    font-size: 16px;
-    margin-bottom: 15px;
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .table-filters {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .leave-container {
+    padding: 10px;
+  }
+  
+  .modal-content {
+    width: 95%;
   }
   
   .modal-header,
   .modal-body {
-    padding: 15px 20px;
-  }
-  
-  .form-control,
-  .document-upload {
-    padding: 10px 12px;
+    padding: 15px;
   }
   
   .submit-button {
     width: 100%;
-    padding: 12px 15px;
+  }
+  
+  .table-content th,
+  .table-content td {
+    padding: 10px 15px;
   }
 }
