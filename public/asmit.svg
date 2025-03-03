@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- No background rectangle for transparency -->
+  
+  <!-- Stylized "A" using square elements - zoomed in and white -->
+  <rect x="10" y="10" width="12" height="80" fill="white" transform="rotate(15, 16, 50)"/>
+  <rect x="78" y="10" width="12" height="80" fill="white" transform="rotate(-15, 84, 50)"/>
+  <rect x="15" y="50" width="70" height="12" fill="white"/>
+  
+  <!-- Stylized "T" using square elements - zoomed in and red -->
+  <rect x="5" y="5" width="90" height="12" fill="#e74c3c"/>
+  <rect x="44" y="5" width="12" height="55" fill="#e74c3c"/>
+</svg>
