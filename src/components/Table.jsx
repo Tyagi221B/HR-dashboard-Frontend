@@ -249,7 +249,7 @@ const Table = ({
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
               >
-                <option value="">Status</option>
+                <option value="">All</option>
                 {filterOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}

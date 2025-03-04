@@ -26,8 +26,11 @@ const columns = [
 const statusOptions = ["New", "Selected", "Rejected", "On Hold", "Interviewed"];
 
 const filterOptions = [
-  { value: "active", label: "Active" },
-  { value: "inactive", label: "Inactive" },
+  { value: "new", label: "New" },
+  { value: "selected", label: "Selected" },
+  { value: "rejected", label: "Rejected" },
+  { value: "on hold", label: "On Hold" },
+  { value: "interviewed", label: "Interviewed" },
 ];
 
 const CandidatesPage = () => {
