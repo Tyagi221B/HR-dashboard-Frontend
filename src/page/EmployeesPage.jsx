@@ -165,6 +165,12 @@ const EmployeesPage = () => {
               showProfileImages={true}
               loading={loading}
               customActions={customTableActions}
+              mobileCardConfig={{
+                titleField: "fullName", 
+                subtitleField: "position",  
+                statusField: "status",
+                initialVisibleFields: ["email", "phone", "joiningDate", "", "department"] 
+              }}
             />
           )}
         </div>

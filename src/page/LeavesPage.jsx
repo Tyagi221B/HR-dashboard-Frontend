@@ -43,7 +43,6 @@ const LeavePage = () => {
       const leavesData = await getLeaves();
       const employeesData = await getActiveEmployees();
 
-      // Check if the response has the expected structure
       if (!leavesData.data || !Array.isArray(leavesData.data)) {
         console.error("Invalid leaves data structure:", leavesData);
         toast.error("Invalid data received from server");
@@ -146,7 +145,6 @@ const LeavePage = () => {
   };
 
   const handleFileUpload = (e) => {
-    // Changed from documents to pdfFile to match backend expectation
     setLeaveFormData(prev => ({ ...prev, pdfFile: e.target.files[0] }));
   };
 
@@ -164,7 +162,6 @@ const LeavePage = () => {
       formData.append("leaveDate", leaveFormData.leaveDate);
       formData.append("reason", leaveFormData.reason);
       if (leaveFormData.pdfFile) {
-        // Changed to use pdfFile to match backend expectation
         formData.append("pdfFile", leaveFormData.pdfFile);
       }
 
@@ -208,7 +205,7 @@ const LeavePage = () => {
 
   const handleDateClick = (date) => {
     setSelectedDate(date);
-    const formattedDate = date.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    const formattedDate = date.toISOString().split('T')[0]; 
     setLeaveFormData(prev => ({ ...prev, leaveDate: formattedDate }));
     setIsAddLeaveModalOpen(true);
   };
@@ -238,6 +235,12 @@ const LeavePage = () => {
                   loading={loading}
                   onButtonClick={() => setIsAddLeaveModalOpen(true)}
                   customActions={customTableActions}
+                  mobileCardConfig={{
+                    titleField: "name", 
+                    subtitleField: "date",  
+                    statusField: "status",
+                    initialVisibleFields: ["docs", "reason"] 
+                  }}
                 />
               )}
             </div>

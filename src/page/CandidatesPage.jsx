@@ -142,7 +142,6 @@ const CandidatesPage = () => {
       toast.dismiss();
 
       if (response && response.data && response.data.resumeUrl) {
-        // Open resume in a new tab
         window.open(response.data.resumeUrl, "_blank");
       } else {
         toast.error("Resume URL not found");
@@ -194,10 +193,16 @@ const CandidatesPage = () => {
               showProfileImages={false}
               loading={loading}
               onButtonClick={() => {
-                setEditCandidate(null); // Reset edit state for add mode
+                setEditCandidate(null); 
                 setIsModalOpen(true);
               }}
-              customActions={customTableActions} // Add the custom actions
+              customActions={customTableActions} 
+              mobileCardConfig={{
+                titleField: "fullName",
+                subtitleField: "position",
+                statusField: "status",
+                initialVisibleFields: ["email", "phone", "experience"]
+              }}
             />
           )}
         </div>

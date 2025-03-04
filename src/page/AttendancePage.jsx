@@ -194,12 +194,10 @@ const AttendancePage = () => {
         task: task,
       };
 
-      // First update the local state for immediate feedback
       setAttendanceData((prev) =>
         prev.map((emp) => (emp.id === id ? { ...emp, task: task } : emp))
       );
 
-      // Then send to the server
       await markAttendance(id, attendancePayload);
       toast.success("Task updated successfully");
     } catch (error) {
@@ -247,6 +245,12 @@ const AttendancePage = () => {
                 showProfileImages={true}
                 loading={loading}
                 customActions={customTableActions}
+                mobileCardConfig={{
+                  titleField: "name", 
+                  subtitleField: "position",  
+                  statusField: "status",
+                  initialVisibleFields: ["department", "task"] 
+                }}
               />
             </>
           )}
