@@ -9,15 +9,34 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const verifyToken = async () => {
+  const refreshToken = async () => {
+    try {
+      const response = await axiosInstance.post("/user/refresh-token");
+      const { accessToken } = response.data;
+      
+      localStorage.setItem("accessToken", accessToken);
+      return accessToken;
+    } catch (error) {
+      console.error("Token refresh failed:", error);
+      return null;
+    }
+  };
+
+  const verifyToken = useCallback(async () => {
     try {
       const response = await axiosInstance.get("/user/me");
       return response.data;
     } catch (error) {
-      console.error("Token verification failed:", error);
+      if (error.response && error.response.status === 401) {
+        const newToken = await refreshToken();
+        if (newToken) {
+          const retryResponse = await axiosInstance.get("/user/me");
+          return retryResponse.data;
+        }
+      }
       return null;
     }
-  };
+  } , []);
 
   const logout = useCallback(async () => {
     try {
@@ -45,21 +64,19 @@ export const AuthProvider = ({ children }) => {
           if (userData) {
             setUser(JSON.parse(storedUser));
           } else {
-            console.log("Token invalid. Attempting to refresh...");
+            await logout();
           }
         } catch (error) {
-          console.log("User session expired. Logging out.", error);
-          logout();
+          console.log("Authentication failed. Logging out.", error);
+          await logout();
         }
-      } else {
-        console.log("User session expired. Logging out");
       }
   
       setLoading(false);
     };
   
     initAuth();
-  }, [logout]);
+  }, [verifyToken, logout]);
   
 
   const login = (userData) => {
@@ -68,6 +85,49 @@ export const AuthProvider = ({ children }) => {
     setUser(userData.data.user);
     navigate("/");
   };
+
+  useEffect(() => {
+    const requestInterceptor = axiosInstance.interceptors.request.use(
+      (config) => {
+        const token = localStorage.getItem("accessToken");
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+
+    const responseInterceptor = axiosInstance.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const originalRequest = error.config;
+
+        if (error.response?.status === 401 && !originalRequest._retry) {
+          originalRequest._retry = true;
+
+          try {
+            const newToken = await refreshToken();
+            if (newToken) {
+              originalRequest.headers.Authorization = `Bearer ${newToken}`;
+              return axiosInstance(originalRequest);
+            } else {
+              await logout();
+            }
+          } catch {
+            await logout();
+          }
+        }
+
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      axiosInstance.interceptors.request.eject(requestInterceptor);
+      axiosInstance.interceptors.response.eject(responseInterceptor);
+    };
+  }, [logout]);
 
   return (
     <AuthContext.Provider value={{ user, login, logout, loading }}>
