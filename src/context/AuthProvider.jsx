@@ -9,37 +9,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const refreshToken = async () => {
-    try {
-      const response = await axiosInstance.post("/user/refresh-token");
-      const { accessToken } = response.data;
-      
-      localStorage.setItem("accessToken", accessToken);
-      return accessToken;
-    } catch (error) {
-      console.error("Token refresh failed:", error);
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("user");
-      return null;
-    }
-  };
-
-  const verifyToken = useCallback(async () => {
-    try {
-      const response = await axiosInstance.get("/user/me");
-      return response.data;
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        const newToken = await refreshToken();
-        if (newToken) {
-          const retryResponse = await axiosInstance.get("/user/me");
-          return retryResponse.data;
-        }
-      }
-      return null;
-    }
-  } , []);
-
   const logout = useCallback(async () => {
     try {
       await axiosInstance.post("/user/logout"); 
@@ -47,11 +16,92 @@ export const AuthProvider = ({ children }) => {
       console.error("Logout failed:", error);
     }
 
+    // Clearing all authentication-related local storage
     localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    
     setUser(null);
     navigate("/login");
   }, [navigate]);
+
+  const refreshToken = useCallback(async () => {
+    try {
+      const refreshTokenStored = localStorage.getItem("refreshToken");
+      
+      if (!refreshTokenStored) {
+        throw new Error("No refresh token available");
+      }
+
+      const response = await axiosInstance.post("/user/refresh-token", {
+        refreshToken: refreshTokenStored
+      });
+
+      const { accessToken, refreshToken: newRefreshToken } = response.data;
+      
+      // Updating tokens in local storage
+      localStorage.setItem("accessToken", accessToken);
+      
+      // Only updating refresh token if a new one is provided
+      if (newRefreshToken) {
+        localStorage.setItem("refreshToken", newRefreshToken);
+      }
+
+      return accessToken;
+    } catch (error) {
+      console.error("Token refresh failed:", error);
+      
+      // Clearing all tokens on refresh failure
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("user");
+      
+      // Force logout
+      await logout();
+      
+      return null;
+    }
+  }, [logout]);
+
+  const verifyToken = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get("/user/me");
+      return response.data;
+    } catch (error) {
+      console.error("Token verification failed:", error);
+      
+      // If verification fails, attempting to refresh
+      if (error.response && error.response.status === 401) {
+        const newToken = await refreshToken();
+        if (newToken) {
+          try {
+            const retryResponse = await axiosInstance.get("/user/me");
+            return retryResponse.data;
+          } catch {
+            // If retry fails, logout
+            await logout();
+            return null;
+          }
+        }
+      }
+      
+      return null;
+    }
+  }, [refreshToken, logout]);
+
+  const login = (userData) => {
+    // Storing both access and refresh tokens
+    localStorage.setItem("user", JSON.stringify(userData.data.user));
+    localStorage.setItem("accessToken", userData.data.accessToken);
+    
+    // Only storing refresh token if it's provided
+    if (userData.data.refreshToken) {
+      localStorage.setItem("refreshToken", userData.data.refreshToken);
+    }
+    
+    setUser(userData.data.user);
+    navigate("/");
+  };
 
   useEffect(() => {
     const initAuth = async () => {
@@ -79,14 +129,6 @@ export const AuthProvider = ({ children }) => {
   
     initAuth();
   }, [verifyToken, logout]);
-  
-
-  const login = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData.data.user));
-    localStorage.setItem("accessToken", userData.data.accessToken);
-    setUser(userData.data.user);
-    navigate("/");
-  };
 
   useEffect(() => {
     const requestInterceptor = axiosInstance.interceptors.request.use(
@@ -105,6 +147,7 @@ export const AuthProvider = ({ children }) => {
       async (error) => {
         const originalRequest = error.config;
 
+        // Only retry once
         if (error.response?.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
 
@@ -129,7 +172,7 @@ export const AuthProvider = ({ children }) => {
       axiosInstance.interceptors.request.eject(requestInterceptor);
       axiosInstance.interceptors.response.eject(responseInterceptor);
     };
-  }, [logout]);
+  }, [logout, refreshToken]);
 
   return (
     <AuthContext.Provider value={{ user, login, logout, loading }}>
