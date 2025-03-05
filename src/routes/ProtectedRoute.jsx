@@ -6,7 +6,7 @@ const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    console.log("⏳ Waiting for authentication to complete...");
+    // console.log("⏳ Waiting for authentication to complete...");
     return (
       <div>
         <SkeletonLoader />
