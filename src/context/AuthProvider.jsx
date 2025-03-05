@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
       console.error("Logout failed:", error);
     }
 
-    // Clearing all authentication-related local storage
     localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
@@ -27,31 +26,25 @@ export const AuthProvider = ({ children }) => {
 
   const refreshToken = useCallback(async () => {
     try {
-      const refreshTokenStored = localStorage.getItem("refreshToken");
+      const refreshToken = localStorage.getItem("refreshToken");
       
-      if (!refreshTokenStored) {
+      if (!refreshToken) {
         throw new Error("No refresh token available");
       }
 
       const response = await axiosInstance.post("/user/refresh-token", {
-        refreshToken: refreshTokenStored
+        refreshToken: refreshToken
       });
 
-      const { accessToken, refreshToken: newRefreshToken } = response.data;
+      const { accessToken, refreshToken: newRefreshToken } = response.data.data;
       
-      // Updating tokens in local storage
       localStorage.setItem("accessToken", accessToken);
-      
-      // Only updating refresh token if a new one is provided
-      if (newRefreshToken) {
-        localStorage.setItem("refreshToken", newRefreshToken);
-      }
+      localStorage.setItem("refreshToken", newRefreshToken);
 
       return accessToken;
     } catch (error) {
       console.error("Token refresh failed:", error);
       
-      // Clearing all tokens on refresh failure
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("user");
@@ -66,17 +59,16 @@ export const AuthProvider = ({ children }) => {
   const verifyToken = useCallback(async () => {
     try {
       const response = await axiosInstance.get("/user/me");
-      return response.data;
+      return response.data.data;
     } catch (error) {
       console.error("Token verification failed:", error);
       
-      // If verification fails, attempting to refresh
       if (error.response && error.response.status === 401) {
         const newToken = await refreshToken();
         if (newToken) {
           try {
             const retryResponse = await axiosInstance.get("/user/me");
-            return retryResponse.data;
+            return retryResponse.data.data;
           } catch {
             // If retry fails, logout
             await logout();
@@ -90,16 +82,13 @@ export const AuthProvider = ({ children }) => {
   }, [refreshToken, logout]);
 
   const login = (userData) => {
-    // Storing both access and refresh tokens
-    localStorage.setItem("user", JSON.stringify(userData.data.user));
-    localStorage.setItem("accessToken", userData.data.accessToken);
+    const { user, accessToken, refreshToken } = userData.data;
     
-    // Only storing refresh token if it's provided
-    if (userData.data.refreshToken) {
-      localStorage.setItem("refreshToken", userData.data.refreshToken);
-    }
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
     
-    setUser(userData.data.user);
+    setUser(user);
     navigate("/");
   };
 
