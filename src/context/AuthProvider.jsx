@@ -18,6 +18,8 @@ export const AuthProvider = ({ children }) => {
       return accessToken;
     } catch (error) {
       console.error("Token refresh failed:", error);
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("user");
       return null;
     }
   };
