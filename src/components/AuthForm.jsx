@@ -4,15 +4,22 @@ import "../css/AuthForm.css";
 import AuthLeftSection from "./AuthLeftSection";
 import { registerUser, loginUser } from "../api/authApi";
 import { useAuth } from "../context/useAuth.js"; // Import AuthContext
+import SpinLoader from "../components/SpinLoader.jsx"
 
-const AuthForm = ({ title, fields, buttonText, linkText, linkUrl, forgotPassword, onSubmitAction }) => {
-
-
+const AuthForm = ({
+  title,
+  fields,
+  buttonText,
+  linkText,
+  linkUrl,
+  forgotPassword,
+  onSubmitAction,
+}) => {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth(); 
-
+  const { login } = useAuth();
+  const [ isLoading, setIsLoading ] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,6 +27,7 @@ const AuthForm = ({ title, fields, buttonText, linkText, linkUrl, forgotPassword
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     setError("");
 
     try {
@@ -27,12 +35,14 @@ const AuthForm = ({ title, fields, buttonText, linkText, linkUrl, forgotPassword
         await registerUser(formData);
         navigate("/login");
       } else if (onSubmitAction === "login") {
-        const userData = await loginUser(formData); 
-        login(userData); 
-        navigate("/"); 
+        const userData = await loginUser(formData);
+        login(userData);
+        navigate("/");
       }
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -58,13 +68,22 @@ const AuthForm = ({ title, fields, buttonText, linkText, linkUrl, forgotPassword
             </div>
           ))}
 
-          {forgotPassword && <p className="forgot-password"><Link to="/forgot-password">Forgot password?</Link></p>}
+          {forgotPassword && (
+            <p className="forgot-password">
+              <Link to="/forgot-password">Forgot password?</Link>
+            </p>
+          )}
 
-          <button type="submit" className="auth-btn">{buttonText}</button>
+          <button type="submit" className="auth-btn" disabled={isLoading}>
+            {isLoading ? <SpinLoader/> : buttonText}
+          </button>
         </form>
 
         <p className="auth-link">
-          {linkText} <Link to={linkUrl}>{buttonText === "Register" ? "Login" : "Register"}</Link>
+          {linkText}{" "}
+          <Link to={linkUrl}>
+            {buttonText === "Register" ? "Login" : "Register"}
+          </Link>
         </p>
       </div>
     </>
