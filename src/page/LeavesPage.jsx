@@ -14,6 +14,9 @@ import {
   downloadDocument
 } from "../api/leaveApi";
 
+import SkeletonLoader from "../components/SkeletonLoader";
+
+
 const LeavePage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isAddLeaveModalOpen, setIsAddLeaveModalOpen] = useState(false);
@@ -218,7 +221,7 @@ const LeavePage = () => {
           <div className="leave-container">
             <div className="leave-left">
               {loading ? (
-                <div>Loading...</div>
+                <div><SkeletonLoader/></div>
               ) : (
                 <Table
                   title="Leaves"
