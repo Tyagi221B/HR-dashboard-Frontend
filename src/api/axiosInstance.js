@@ -12,14 +12,9 @@ let refreshTokenPromise = null;
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    console.group("Axios Request");
-    console.log("URL:", config.url);
-    console.log("Method:", config.method);
-    
     const token = localStorage.getItem("accessToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log("Token included in request");
     } else {
       console.warn("No access token found");
     }
@@ -33,11 +28,6 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (response) => {
-    console.group("Axios Response");
-    console.log("URL:", response.config.url);
-    console.log("Status:", response.status);
-    console.groupEnd();
-    
     return response;
   },
   (error) => {

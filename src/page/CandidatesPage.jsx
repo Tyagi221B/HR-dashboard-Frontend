@@ -11,7 +11,7 @@ import {
   updateCandidate,
 } from "../api/candidateAPI";
 import { toast } from "react-hot-toast";
-import SkeletonLoader from "../components/Loader";
+import SkeletonLoader from "../components/SkeletonLoader";
 
 const columns = [
   { key: "srNo", label: "Sr No.", sortable: false },
@@ -196,15 +196,15 @@ const CandidatesPage = () => {
               showProfileImages={false}
               loading={loading}
               onButtonClick={() => {
-                setEditCandidate(null); 
+                setEditCandidate(null);
                 setIsModalOpen(true);
               }}
-              customActions={customTableActions} 
+              customActions={customTableActions}
               mobileCardConfig={{
                 titleField: "fullName",
                 subtitleField: "position",
                 statusField: "status",
-                initialVisibleFields: ["email", "phone", "experience"]
+                initialVisibleFields: ["email", "phone", "experience"],
               }}
             />
           )}

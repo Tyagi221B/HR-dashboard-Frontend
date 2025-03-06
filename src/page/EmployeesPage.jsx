@@ -7,7 +7,7 @@ import {
   updateEmployee,
 } from "../api/employeeAPI";
 import { toast } from "react-hot-toast";
-import SkeletonLoader from "../components/Loader";
+import SkeletonLoader from "../components/SkeletonLoader";
 import EditEmployeeModal from "../components/EmployeeModal";
 
 const columns = [
@@ -166,10 +166,16 @@ const EmployeesPage = () => {
               loading={loading}
               customActions={customTableActions}
               mobileCardConfig={{
-                titleField: "fullName", 
-                subtitleField: "position",  
+                titleField: "fullName",
+                subtitleField: "position",
                 statusField: "status",
-                initialVisibleFields: ["email", "phone", "joiningDate", "", "department"] 
+                initialVisibleFields: [
+                  "email",
+                  "phone",
+                  "joiningDate",
+                  "",
+                  "department",
+                ],
               }}
             />
           )}

@@ -7,7 +7,7 @@ import {
   getEmployeeAttendance,
 } from "../api/employeeAPI";
 import { toast } from "react-hot-toast";
-import SkeletonLoader from "../components/Loader";
+import SkeletonLoader from "../components/SkeletonLoader";
 
 const AttendancePage = () => {
   const [attendanceData, setAttendanceData] = useState([]);
@@ -43,11 +43,13 @@ const AttendancePage = () => {
       const attendancePromises = employeeList.map(async (employee) => {
         try {
           const attendanceResponse = await getEmployeeAttendance(employee._id);
-          console.log(`Attendance for ${employee.fullName}:`, attendanceResponse?.data);
-          
+          // console.log(`Attendance for ${employee.fullName}:`, attendanceResponse?.data);
+
           const todayAttendance = attendanceResponse?.data?.find((record) => {
             const recordDate = new Date(record.date);
-            const localDate = new Date(recordDate.getTime() - recordDate.getTimezoneOffset() * 60000)
+            const localDate = new Date(
+              recordDate.getTime() - recordDate.getTimezoneOffset() * 60000
+            )
               .toISOString()
               .split("T")[0];
             return localDate === today;
@@ -77,7 +79,7 @@ const AttendancePage = () => {
       });
 
       const attendanceResults = await Promise.all(attendancePromises);
-      console.log("Final Processed Attendance Data:", attendanceResults);
+      // console.log("Final Processed Attendance Data:", attendanceResults);
       setAttendanceData(attendanceResults);
     } catch (error) {
       toast.error(error.message || "Failed to load employee data");
@@ -138,10 +140,10 @@ const AttendancePage = () => {
               showProfileImages={true}
               loading={loading}
               mobileCardConfig={{
-                titleField: "name", 
-                subtitleField: "position",  
+                titleField: "name",
+                subtitleField: "position",
                 statusField: "status",
-                initialVisibleFields: ["department", "task"] 
+                initialVisibleFields: ["department", "task"],
               }}
             />
           )}
