@@ -8,6 +8,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -17,12 +18,14 @@ const Sidebar = () => {
       }
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    await logout();
+    setIsLoggingOut(false);
     navigate("/login");
   };
 
@@ -42,12 +45,12 @@ const Sidebar = () => {
     <>
       {/* Mobile Menu Toggle */}
       {isMobile && (
-        <button 
+        <button
           className="mobile-menu-toggle"
           onClick={toggleMobileMenu}
           aria-label="Toggle navigation menu"
         >
-          <span className={`hamburger ${isMobileMenuOpen ? 'open' : ''}`}>
+          <span className={`hamburger ${isMobileMenuOpen ? "open" : ""}`}>
             <span></span>
             <span></span>
             <span></span>
@@ -56,15 +59,19 @@ const Sidebar = () => {
       )}
 
       {/* Sidebar */}
-      <div className={`sidebar ${isMobile ? 'mobile' : ''} ${isMobileMenuOpen ? 'open' : ''}`}>
+      <div
+        className={`sidebar ${isMobile ? "mobile" : ""} ${
+          isMobileMenuOpen ? "open" : ""
+        }`}
+      >
         <div className="sidebar-header">
           <div className="logo">
             <img src="/icons/logo.svg" alt="logo" width={20} height={20} />
             <div>LOGO</div>
           </div>
-          
+
           {isMobile && (
-            <button 
+            <button
               className="close-sidebar"
               onClick={toggleMobileMenu}
               aria-label="Close navigation menu"
@@ -89,10 +96,17 @@ const Sidebar = () => {
             <li>
               <NavLink
                 to="/"
-                className={({ isActive }) => (isActive ? "menu-item active" : "menu-item")}
+                className={({ isActive }) =>
+                  isActive ? "menu-item active" : "menu-item"
+                }
                 onClick={closeMobileMenu}
               >
-                <img src="/icons/candidates.svg" alt="Candidates" width={20} height={20} />
+                <img
+                  src="/icons/candidates.svg"
+                  alt="Candidates"
+                  width={20}
+                  height={20}
+                />
                 <span>Candidates</span>
               </NavLink>
             </li>
@@ -106,30 +120,51 @@ const Sidebar = () => {
             <li>
               <NavLink
                 to="/employees"
-                className={({ isActive }) => (isActive ? "menu-item active" : "menu-item")}
+                className={({ isActive }) =>
+                  isActive ? "menu-item active" : "menu-item"
+                }
                 onClick={closeMobileMenu}
               >
-                <img src="/icons/employees.svg" alt="Employees" width={20} height={20} />
+                <img
+                  src="/icons/employees.svg"
+                  alt="Employees"
+                  width={20}
+                  height={20}
+                />
                 <span>Employees</span>
               </NavLink>
             </li>
             <li>
               <NavLink
                 to="/attendance"
-                className={({ isActive }) => (isActive ? "menu-item active" : "menu-item")}
+                className={({ isActive }) =>
+                  isActive ? "menu-item active" : "menu-item"
+                }
                 onClick={closeMobileMenu}
               >
-                <img src="/icons/attendance.svg" alt="Attendance" width={20} height={20} />
+                <img
+                  src="/icons/attendance.svg"
+                  alt="Attendance"
+                  width={20}
+                  height={20}
+                />
                 <span>Attendance</span>
               </NavLink>
             </li>
             <li>
               <NavLink
                 to="/leaves"
-                className={({ isActive }) => (isActive ? "menu-item active" : "menu-item")}
+                className={({ isActive }) =>
+                  isActive ? "menu-item active" : "menu-item"
+                }
                 onClick={closeMobileMenu}
               >
-                <img src="/icons/leaves.svg" alt="Leaves" width={20} height={20} />
+                <img
+                  src="/icons/leaves.svg"
+                  alt="Leaves"
+                  width={20}
+                  height={20}
+                />
                 <span>Leaves</span>
               </NavLink>
             </li>
@@ -140,17 +175,29 @@ const Sidebar = () => {
         <div className="menu-title">
           <h5>Others</h5>
           <ul>
-            <li className="menu-item" onClick={() => {
-              handleLogout();
-              closeMobileMenu();
-            }}>
-              <img src="/icons/logout.svg" alt="Logout" width={20} height={20} />
-              <span>Logout</span>
+            <li
+              className="menu-item"
+              onClick={() => {
+                if (!isLoggingOut) handleLogout();
+                closeMobileMenu();
+              }}
+              style={{
+                cursor: isLoggingOut ? "not-allowed" : "pointer",
+                opacity: isLoggingOut ? 0.6 : 1,
+              }}
+            >
+              <img
+                src="/icons/logout.svg"
+                alt="Logout"
+                width={20}
+                height={20}
+              />
+              <span>{isLoggingOut ? "Logging out..." : "Logout"}</span>
             </li>
           </ul>
         </div>
       </div>
-      
+
       {/* Overlay for mobile */}
       {isMobile && isMobileMenuOpen && (
         <div className="sidebar-overlay" onClick={toggleMobileMenu}></div>

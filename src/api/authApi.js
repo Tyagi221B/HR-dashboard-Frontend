@@ -11,9 +11,26 @@ export const loginUser = async (userData) => {
 };
 
 export const logoutUser = async () => {
-  await axios.post("/user/logout", {}, { withCredentials: true });
+  try {
+    await axios.post("/user/logout", {}, { 
+      withCredentials: true,
+      headers: {
+        'Skip-Interceptor': 'true'
+      }
+    });
+  } catch (error) {
+    console.error("Logout failed:", error);
+  } finally {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
+    window.location.href = "/login"; 
+  }
 };
 
+
 export const getCurrentUser = async () => {
-  await axios.get("/user/me", { withCredentials: true });
-}
+  const { data } = await axios.get("/user/me", { withCredentials: true });
+  return data;
+};
+
